@@ -1,0 +1,12 @@
+
+/* Class = "IBUILabel"; text = "Detail"; ObjectID = "0de-J7-3W1"; */
+"0de-J7-3W1.text" = "Detail";
+
+/* Class = "IBUIViewController"; title = "Add Task"; ObjectID = "bRC-bo-PG2"; */
+"bRC-bo-PG2.title" = "Add Task";
+
+/* Class = "IBUILabel"; text = "Title"; ObjectID = "bpx-Zh-bdn"; */
+"bpx-Zh-bdn.text" = "Title";
+
+/* Class = "IBUINavigationItem"; title = "Title"; ObjectID = "v6w-iX-eIa"; */
+"v6w-iX-eIa.title" = "Title";

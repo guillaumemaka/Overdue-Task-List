@@ -1,0 +1,35 @@
+//
+//  Prefix header
+//
+//  The contents of this file are implicitly included at the beginning of every source file.
+//
+
+#import <Availability.h>
+
+#ifndef __IPHONE_5_0
+#warning "This project uses features only available in iOS SDK 5.0 and later."
+#endif
+
+#define PARSE_APP_ID @"<Put your parse app id here>"
+#define PARSE_APP_CLIENT_KEY @"<put your parse app key here>"
+
+#define TASK_NAME_KEY @"name"
+#define TASK_DESCRIPTION_KEY @"description"
+#define TASK_DATE_KEY @"dueDate"
+#define TASK_COMPLETED_KEY @"isCompleted"
+#define TASkS_OBJECT_KEY @"Tasks"
+#define DATE_FORMAT @"D, dd, MMM, yyyy"
+
+#define SETTINGS_KEY @"Settings"
+#define SETTINGS_CAPITALIZING_KEY @"kCapitalize"
+#define SETTINGS_SORTING_KEY @"kSort"
+#define SETTINGS_MULTIPLE_SECTION_KEY @"kMultipleSection"
+
+#ifdef __OBJC__
+  #import <UIKit/UIKit.h>
+  #import <Foundation/Foundation.h>
+
+  #define TASK_COMPLETED_COLOR [UIColor colorWithRed:54.0f/255.0f green:215.0f/255.0f blue:146.0f/255.0f alpha:1.0f]
+  #define TASK_UNCOMPLETED_COLOR [UIColor colorWithRed:255.0f/255.0f green:235.0f/255.0f blue:115.0f/255.0f alpha:1.0f]
+  #define TASK_OVERDUED_COLOR [UIColor colorWithRed:252.0f/255.0f green:63.0f/255.0f blue:77.0f/255.0f alpha:1.0f]
+#endif
