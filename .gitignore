@@ -19,3 +19,6 @@ DerivedData
 
 #CocoaPods
 Pods
+
+# specific exclusion
+Overdue Task List-Info.plistOverdue Task List-Prefix.pch
