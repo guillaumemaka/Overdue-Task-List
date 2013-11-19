@@ -15,7 +15,7 @@ enum GMTaskListSection {
   GMTaskListSectionCompleted = 0,
   GMTaskListSectionIncompleted ,
   GMTaskListSectionOverdued
-  };
+};
 
 @interface GMTaskListViewController ()
 
@@ -40,7 +40,7 @@ enum GMTaskListSection {
 /*! Load tasks from NSUserDefault */
 -(void) fetchTasks:(BOOL) reload;
 
-//! Save task to NSUserDefault
+//! Save task to the backend
 -(void) saveTask:(GMTask*) task;
 
 /*! Get a task from a property list
@@ -55,7 +55,9 @@ enum GMTaskListSection {
  */
 -(void) configureCell:(UITableViewCell*)cell withTask:(GMTask*) task;
 
-//!
+//! Get an indexPath for a task
+//\param task the task
+//\return an index path
 -(NSIndexPath*) indexPathForTask:(GMTask*) task;
 
 /*! Function that compare if a a given date is greater than another
@@ -68,7 +70,9 @@ enum GMTaskListSection {
 //! Method that update the UI
 -(void) updateUI;
 
-// Configure the table view disposition according to user settings
+//! Configure the table view disposition according to user settings
+//\param tasks an array of task
+//\param reloaded YES to reload the table view, NO to fo nothing
 -(void) prepareTableViewWithTask:(NSArray*) tasks andReload:(BOOL) reloaded;
 
 //! Setup method
@@ -97,7 +101,7 @@ enum GMTaskListSection {
   // Dispose of any resources that can be recreated.
 }
 
--(void)viewDidAppear:(BOOL)animated{    
+-(void)viewDidAppear:(BOOL)animated{
   if (self.needToReload) {
     [self.tableView reloadData];
     self.needToReload = NO;
@@ -107,6 +111,8 @@ enum GMTaskListSection {
 #pragma mark - Helpers
 
 -(void)setUp{
+  
+  // Load settings
   NSDictionary *settings = [[NSUserDefaults standardUserDefaults] dictionaryForKey:SETTINGS_KEY];
   self.capitalize = [settings[SETTINGS_CAPITALIZING_KEY] boolValue];
   self.sortingModelKey = [settings[SETTINGS_SORTING_KEY] integerValue] == 0 ? TASK_NAME_KEY : TASK_DATE_KEY;
@@ -114,46 +120,61 @@ enum GMTaskListSection {
 }
 
 -(void)fetchTasks:(BOOL) reload{
-//
-//  NSArray* savedTasks = [[NSUserDefaults standardUserDefaults] arrayForKey:TASkS_OBJECT_KEY];
-//  for (NSDictionary *data in savedTasks) {
-//    GMTask *task = [[GMTask alloc] initWithData:data];
-//    [self.tasks addObject:task];
-//  }
+  //
+  //  NSArray* savedTasks = [[NSUserDefaults standardUserDefaults] arrayForKey:TASkS_OBJECT_KEY];
+  //  for (NSDictionary *data in savedTasks) {
+  //    GMTask *task = [[GMTask alloc] initWithData:data];
+  //    [self.tasks addObject:task];
+  //  }
   
+  // Get a PFQuery object
   PFQuery *query = [GMTask query];
+  
+  // Construct the query based on settings
   [query whereKey:@"username" equalTo:[[PFUser currentUser] username]];
   [query orderByAscending:self.sortingModelKey];
   
+  // Perform the query in background
   [query findObjectsInBackgroundWithBlock:^(NSArray *tasks, NSError *error) {
     
-      [self prepareTableViewWithTask:tasks andReload:reload];
-      [self updateUI];
+    // Prepare the table view with retrieved tasks
+    [self prepareTableViewWithTask:tasks andReload:reload];
+    
+    // Update UI
+    [self updateUI];
   }];
 }
 
 -(void)saveTask:(GMTask*) task{
-//  NSMutableArray *tasksToSave = [[NSMutableArray alloc] init];
-//  for (GMTask *task in self.tasks) {
-//    [tasksToSave addObject:@{
-//                             TASK_NAME_KEY : task.name,
-//                             TASK_DESCRIPTION_KEY : task.taskDescription,
-//                             TASK_DATE_KEY : task.dueDate,
-//                             TASK_COMPLETED_KEY : @(task.isConpleted) }];
-//  }
-//  
-//  [[NSUserDefaults standardUserDefaults] setObject:tasksToSave forKey:TASkS_OBJECT_KEY];
-//  [[NSUserDefaults standardUserDefaults] synchronize];
+  //  NSMutableArray *tasksToSave = [[NSMutableArray alloc] init];
+  //  for (GMTask *task in self.tasks) {
+  //    [tasksToSave addObject:@{
+  //                             TASK_NAME_KEY : task.name,
+  //                             TASK_DESCRIPTION_KEY : task.taskDescription,
+  //                             TASK_DATE_KEY : task.dueDate,
+  //                             TASK_COMPLETED_KEY : @(task.isConpleted) }];
+  //  }
+  //
+  //  [[NSUserDefaults standardUserDefaults] setObject:tasksToSave forKey:TASkS_OBJECT_KEY];
+  //  [[NSUserDefaults standardUserDefaults] synchronize];
   
+  // Save the task in backgound
   [task saveEventually:^(BOOL succeeded, NSError *error) {
+    
+    // Get the indez path for the new added task
     NSIndexPath *indexPath = [self indexPathForTask:task];
+    
+    // Put the task in the right Array
     if (self.multipleSection) {
       [self.tasks[indexPath.section] addObject:task];
     }else{
       [self.tasks addObject:task];
     }
     
+    // insert a new row in the tableview
     [self.tableView insertRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationAutomatic];
+    
+    // reload data in the section
     [self.tableView reloadSections:[NSIndexSet indexSetWithIndex:indexPath.section] withRowAnimation:UITableViewRowAnimationAutomatic];
   }];
 }
@@ -197,7 +218,7 @@ enum GMTaskListSection {
                                                                             target:self
                                                                             action:@selector(reorderAction:)];
     
-
+    
     self.navigationItem.leftBarButtonItem.style = self.isInEditingMode ? UIBarButtonItemStyleDone : UIBarButtonItemStyleBordered;
     self.navigationItem.leftBarButtonItem.title = self.isInEditingMode ? @"Done" : @"Edit";
   }else{
@@ -206,6 +227,8 @@ enum GMTaskListSection {
 }
 
 -(void)prepareTableViewWithTask:(NSArray *)tasks andReload:(BOOL)reloaded{
+  
+  // Sorting tasks
   NSArray *sortedTask = [tasks sortedArrayUsingComparator:^NSComparisonResult(id obj1, id obj2) {
     GMTask *task1 = (GMTask*) obj1;
     GMTask *task2 = (GMTask*) obj2;
@@ -231,31 +254,42 @@ enum GMTaskListSection {
     return (NSComparisonResult)NSOrderedSame;
   }];
   
+  // if multipleSection setting set to YES, re-organize the array
   if (self.multipleSection) {
+    
+    // initialize 3 arrays (sections)
     NSMutableArray *sectionTaskCompleted = [@[] mutableCopy];
     NSMutableArray *sectionTaskInCompleted = [@[] mutableCopy];
     NSMutableArray *sectionTaskOverdued = [@[] mutableCopy];
     
+    // initialize predicates for each sections
     NSPredicate *completedTaskPredicate = [NSPredicate predicateWithFormat:@"%K = YES", TASK_COMPLETED_KEY];
     NSPredicate *inCompletedTaskPredicate = [NSPredicate predicateWithFormat:@"(%K = NO) && (%K > %@)", TASK_COMPLETED_KEY, TASK_DATE_KEY, [NSDate date]];
     NSPredicate *overduedTaskPredicate = [NSPredicate predicateWithFormat:@"(%K < %@) && !(%K = YES)", TASK_DATE_KEY, [NSDate date], TASK_COMPLETED_KEY, TASK_COMPLETED_KEY];
     
+    // Get each section
     sectionTaskCompleted = [[sortedTask filteredArrayUsingPredicate:completedTaskPredicate] mutableCopy];
     sectionTaskInCompleted = [[sortedTask filteredArrayUsingPredicate:inCompletedTaskPredicate] mutableCopy];
     sectionTaskOverdued = [[sortedTask filteredArrayUsingPredicate:overduedTaskPredicate] mutableCopy];
     
+    // remove all objects
     [self.tasks removeAllObjects];
+    
+    // add each section
     [self.tasks addObject:sectionTaskCompleted];
     [self.tasks addObject:sectionTaskInCompleted];
     [self.tasks addObject:sectionTaskOverdued];
   }else {
+    // onle one section
     self.tasks = [sortedTask mutableCopy];
   }
   
+  // reload the table view if needed
   if (reloaded) {
     [self.tableView reloadData];
   }
   
+  // Update UI
   [self updateUI];
 }
 
@@ -269,9 +303,10 @@ enum GMTaskListSection {
   
   BOOL oldMultipleSetting = self.multipleSection;
   BOOL newMultipleSetting = [settings[SETTINGS_MULTIPLE_SECTION_KEY] boolValue];
-
+  
   self.multipleSection = newMultipleSetting;
   
+  // re organize task according to new settings
   if (oldMultipleSetting) {
     if (!newMultipleSetting) {
       NSMutableArray *allTasks = [@[] mutableCopy];
@@ -282,9 +317,11 @@ enum GMTaskListSection {
       [self prepareTableViewWithTask:allTasks andReload:NO];
     }
   }else{
-      [self prepareTableViewWithTask:self.tasks andReload:NO];
+    [self prepareTableViewWithTask:self.tasks andReload:NO];
   }
   
+  // inform the table view we wabt to reloaad the table view
+  // next time the view did appear
   self.needToReload = YES;
 }
 
@@ -292,13 +329,15 @@ enum GMTaskListSection {
 
 -(NSInteger)numberOfSectionsInTableView:(UITableView *)tableView{
   if (self.multipleSection) {
-    return [self.tasks count];
+    return [self.tasks count]; // 3 Sections completed, incompleted, overdued tasks
   }
   
   return 1;
 }
 
 -(NSString *)tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section{
+  
+  // set the appropriate title for each section
   if (self.multipleSection) {
     switch (section) {
       case GMTaskListSectionCompleted:
@@ -344,8 +383,10 @@ enum GMTaskListSection {
 }
 
 -(void)configureCell:(UITableViewCell *)cell withTask:(GMTask *)task{
+  // Create a block reference of the cell
   __block UITableViewCell *blockCell = cell;
   
+  // fetch the task data if needed
   [task fetchIfNeededInBackgroundWithBlock:^(PFObject *object, NSError *error) {
     GMTask *task = (GMTask*) object;
     
@@ -411,9 +452,11 @@ enum GMTaskListSection {
   // Toggle the task state
   task.isCompleted = !task.isCompleted;
   
+  // retrieve the new index path
   NSIndexPath* newIndexPath = [self indexPathForTask:task];
   
   if (self.multipleSection) {
+    // move the task where it belongs
     [self.tasks[newIndexPath.section] addObject:task];
     [self.tasks[indexPath.section] removeObjectAtIndex:indexPath.row];
     
@@ -429,12 +472,12 @@ enum GMTaskListSection {
   [task saveInBackground];
 }
 
- // Override to support conditional editing of the table view.
- - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
- {
-   // Return NO if you do not want the specified item to be editable.
-   return YES;
- }
+// Override to support conditional editing of the table view.
+- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  // Return NO if you do not want the specified item to be editable.
+  return YES;
+}
 
 
 
@@ -456,14 +499,16 @@ enum GMTaskListSection {
       taskToRemove = self.tasks[indexPath.row];
     }
     
-    // first we remove the task from the data source
+    
     [taskToRemove deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
       if (succeeded) {
+        
+        // first we remove the task from the data source
         if (self.multipleSection) {
-            [self.tasks[indexPath.section] removeObjectAtIndex:indexPath.row];
+          [self.tasks[indexPath.section] removeObjectAtIndex:indexPath.row];
         }else{
-            [self.tasks removeObjectAtIndex:indexPath.row];
-        }        
+          [self.tasks removeObjectAtIndex:indexPath.row];
+        }
         
         // second we remove the task from the view
         [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
@@ -471,9 +516,10 @@ enum GMTaskListSection {
         // third notify the view we've done
         [self.tableView endUpdates];
         
+        // update UI
         [self updateUI];
       }
-    }];        
+    }];
   }
   else if (editingStyle == UITableViewCellEditingStyleInsert) {
     // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
@@ -485,6 +531,7 @@ enum GMTaskListSection {
 // Override to support rearranging the table view.
 - (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath
 {
+  
   if (!self.multipleSection) {
     [self.tasks exchangeObjectAtIndex:toIndexPath.row withObjectAtIndex:fromIndexPath.row];
     [GMTask saveAllInBackground:self.tasks];
@@ -495,7 +542,7 @@ enum GMTaskListSection {
 // Override to support conditional rearranging of the table view.
 - (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  // Return NO if you do not want the item to be re-orderable.
+  // Allow only re-ordering for non-multiple section table view
   return !self.multipleSection;
 }
 

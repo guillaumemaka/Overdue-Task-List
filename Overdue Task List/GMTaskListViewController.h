@@ -20,5 +20,6 @@ extern NSString* kSettingsNotificationDidChange;
 
 - (IBAction)reorderAction:(UIBarButtonItem *)sender;
 
+//! Handler for setings notification
 - (void)settingsChange:(NSNotification*) notification;
 @end
