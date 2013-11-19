@@ -26,6 +26,7 @@
 		F04019111828700F00AAAD20 /* GMTaskDetailViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F04019101828700F00AAAD20 /* GMTaskDetailViewController.m */; };
 		F04019141828786200AAAD20 /* GMTaskEditViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F04019131828786200AAAD20 /* GMTaskEditViewController.m */; };
 		F04E6FA718386E9700546F51 /* GMSettingsViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F04E6FA618386E9700546F51 /* GMSettingsViewController.m */; };
+		F08B1E0A183B2DF1006A252A /* GMCustomTabBarController.m in Sources */ = {isa = PBXBuildFile; fileRef = F08B1E09183B2DF1006A252A /* GMCustomTabBarController.m */; };
 		F0D2B12618327B5A009AB50E /* Parse.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D2B12518327B5A009AB50E /* Parse.framework */; };
 		F0D2B13018327BD7009AB50E /* AudioToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D2B12718327BD7009AB50E /* AudioToolbox.framework */; };
 		F0D2B13118327BD7009AB50E /* CFNetwork.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F0D2B12818327BD7009AB50E /* CFNetwork.framework */; };
@@ -81,6 +82,8 @@
 		F04019131828786200AAAD20 /* GMTaskEditViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMTaskEditViewController.m; sourceTree = "<group>"; };
 		F04E6FA518386E9700546F51 /* GMSettingsViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMSettingsViewController.h; sourceTree = "<group>"; };
 		F04E6FA618386E9700546F51 /* GMSettingsViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMSettingsViewController.m; sourceTree = "<group>"; };
+		F08B1E08183B2DF1006A252A /* GMCustomTabBarController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GMCustomTabBarController.h; sourceTree = "<group>"; };
+		F08B1E09183B2DF1006A252A /* GMCustomTabBarController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GMCustomTabBarController.m; sourceTree = "<group>"; };
 		F0D2B12518327B5A009AB50E /* Parse.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Parse.framework; sourceTree = "<group>"; };
 		F0D2B12718327BD7009AB50E /* AudioToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AudioToolbox.framework; path = System/Library/Frameworks/AudioToolbox.framework; sourceTree = SDKROOT; };
 		F0D2B12818327BD7009AB50E /* CFNetwork.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CFNetwork.framework; path = System/Library/Frameworks/CFNetwork.framework; sourceTree = SDKROOT; };
@@ -230,6 +233,8 @@
 				F0D2B13C1832925F009AB50E /* GMWelcomeViewController.m */,
 				F04E6FA518386E9700546F51 /* GMSettingsViewController.h */,
 				F04E6FA618386E9700546F51 /* GMSettingsViewController.m */,
+				F08B1E08183B2DF1006A252A /* GMCustomTabBarController.h */,
+				F08B1E09183B2DF1006A252A /* GMCustomTabBarController.m */,
 			);
 			name = Controllers;
 			sourceTree = "<group>";
@@ -345,6 +350,7 @@
 				F04019061827F1F900AAAD20 /* GMTaskListViewController.m in Sources */,
 				F04E6FA718386E9700546F51 /* GMSettingsViewController.m in Sources */,
 				F040190E18280D4C00AAAD20 /* GMTask.m in Sources */,
+				F08B1E0A183B2DF1006A252A /* GMCustomTabBarController.m in Sources */,
 				F0D2B13D1832925F009AB50E /* GMWelcomeViewController.m in Sources */,
 				F04018DA1827EF3400AAAD20 /* main.m in Sources */,
 				F04019141828786200AAAD20 /* GMTaskEditViewController.m in Sources */,

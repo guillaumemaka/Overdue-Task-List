@@ -58,6 +58,10 @@
   }
 }
 
+-(BOOL)prefersStatusBarHidden{
+  return YES;
+}
+
 -(void)performLogin{
   [self presentViewController:_loginVC animated:YES completion:nil];
 }

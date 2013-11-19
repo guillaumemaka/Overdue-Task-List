@@ -389,7 +389,7 @@ enum GMTaskListSection {
       section = GMTaskListSectionOverdued;
     }
     
-    row = [self.tasks[section] count] == 0 ? 0 : [self.tasks[section] count] - 1;
+    row = [self.tasks[section] count] == 0 ? 0 : (int) [self.tasks[section] count] - 1;
     
     indexPath = [NSIndexPath indexPathForRow:row inSection:section];
   }else{

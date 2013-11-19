@@ -10,8 +10,8 @@
 #warning "This project uses features only available in iOS SDK 5.0 and later."
 #endif
 
-#define PARSE_APP_ID @"<Put your parse app id here>"
-#define PARSE_APP_CLIENT_KEY @"<put your parse app key here>"
+#define PARSE_APP_ID @"<PUT YOUR PARSE APP ID HERE"
+#define PARSE_APP_CLIENT_KEY @"PUT YOUR PARSE APP KEY"
 
 #define TASK_NAME_KEY @"name"
 #define TASK_DESCRIPTION_KEY @"description"

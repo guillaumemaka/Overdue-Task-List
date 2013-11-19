@@ -25,16 +25,16 @@
 		<dict>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>fb&lt;FacebookAppID&gt;</string>
+				<string>fbXXXXXXXXXXXX&lt;REPLACE XXXXXX by YOUR FacebookeAppID and remove this HINT&gt;</string>
 			</array>
 		</dict>
 	</array>
 	<key>CFBundleVersion</key>
 	<string>1.0</string>
 	<key>FacebookAppID</key>
-	<string>&lt;FacebookAppID&gt;</string>
+	<string>PUT YOUR FacebookeAppID HERE</string>
 	<key>FacebookDisplayName</key>
-	<string>&lt;FacebookDisplayName&gt;</string>
+	<string>Overdue Task LIst</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UIMainStoryboardFile</key>

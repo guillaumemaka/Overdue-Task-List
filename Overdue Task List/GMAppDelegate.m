@@ -28,6 +28,8 @@
   GMWelcomeViewController *welcomeVC = (GMWelcomeViewController*) self.window.rootViewController;
   welcomeVC.delegate = self;
   
+  [self customizeAppearence];
+  
   return YES;
 }
 - (BOOL)application:(UIApplication *)application handleOpenURL:(NSURL *)url{
@@ -52,8 +54,19 @@
   [[NSNotificationCenter defaultCenter] removeObserver:self name:GMDidSignOutNotification object:nil];
   UITabBarController* tabBarVC = (UITabBarController*) self.window.rootViewController;
   
-  GMTaskListViewController* taskListVC = (GMTaskListViewController*) [tabBarVC.viewControllers[0] topViewController];
-  [[NSNotificationCenter defaultCenter] removeObserver:taskListVC name:GMSettingsDidChangeNotification object:nil];
+  if ([tabBarVC isKindOfClass:[UITabBarController class]]) {
+    GMTaskListViewController* taskListVC = (GMTaskListViewController*) [tabBarVC.viewControllers[0] topViewController];
+    [[NSNotificationCenter defaultCenter] removeObserver:taskListVC name:GMSettingsDidChangeNotification object:nil];
+  }
+}
+
+-(void) customizeAppearence{
+  [UINavigationBar appearance].tintColor = [UIColor whiteColor];
+  [UINavigationBar appearance].barTintColor = [UIColor colorWithRed:10.0f/255.0f green:100.0f/255.0f blue:164.0f/255.0f alpha:1.0f];
+  NSDictionary *textAttributes = @{ NSForegroundColorAttributeName : [UIColor whiteColor]};
+  [UINavigationBar appearance].titleTextAttributes = textAttributes;
+  [UITabBar appearance].tintColor = [UIColor whiteColor];
+  [UITabBar appearance].barTintColor = [UIColor colorWithRed:10.0f/255.0f green:100.0f/255.0f blue:164.0f/255.0f alpha:1.0f];  
 }
 
 - (void)applicationWillEnterForeground:(UIApplication *)application
